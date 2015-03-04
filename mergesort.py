@@ -1,6 +1,9 @@
 data = [line.strip() for line in open("IntegerArray.txt", 'r')]
 data = [int(i) for i in data]
 
+arr100 = [line.strip() for line in open("100.txt", 'r')]
+arr100 = [int(i) for i in arr100]
+
 def mergeSort(alist):
     # if length of alist is greater than one, split it 
     # in half
@@ -36,5 +39,6 @@ def mergeSort(alist):
             alist[k]=righthalf[j]
             j=j+1
             k=k+1
-
-# mergeSort(data)
+print(arr100)
+mergeSort(arr100)
+print(arr100)
