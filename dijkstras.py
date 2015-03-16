@@ -10,23 +10,23 @@ ex_map = {
 	6: [(1, 14), (3, 2), (5, 9)],
 }
 
-def dijkstras(initial_node, destination_node, map_dict, nodes=False, unvisited=False):
+def dijkstras(initial_node, destination_node, edge_set_by_node, nodes=None, unvisited=None):
 	# Assign to every node a tentative distance value. 0 for the starting node
 	# and infinity for all others. 
-	if not nodes:
-		nodes = {key: float('inf') for key in map_dict.keys()}
+	if nodes is None:
+		nodes = {key: float('inf') for key in edge_set_by_node.keys()}
 		nodes[initial_node] = 0
 	# Create a set of all unvisited nodes
-	if not unvisited:
-		unvisited = set(key for key in map_dict.keys())
+	if unvisited is None:
+		unvisited = set(edge_set_by_node.keys())
 	
 	# Set the initial node as current
 	current_node = initial_node
 	
-	# For the current node, consider all it's unvisited neighbors and calculate their 
+	# For the current node, consider all its unvisited neighbors and calculate their 
 	# tentative distances. Compare the tentative distance to the current assigned value
 	# and assign the smaller one.
-	neighbors = map_dict[current_node]
+	neighbors = edge_set_by_node[current_node]
 	print(neighbors)
 	current_distance = nodes[current_node]
 	for neighbor in neighbors:
@@ -49,6 +49,6 @@ def dijkstras(initial_node, destination_node, map_dict, nodes=False, unvisited=F
 	min_distance = min(unvisited_distances.values())
 	if min_distance != float('inf'):
 		current_node = [key for key in unvisited_distances.keys() if unvisited_distances[key] == min_distance][0]
-		return dijkstras(current_node, destination_node, map_dict, nodes, unvisited)
+		return dijkstras(current_node, destination_node, edge_set_by_node, nodes, unvisited)
 
 print(dijkstras(1, 6, ex_map))

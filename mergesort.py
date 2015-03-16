@@ -1,44 +1,28 @@
-data = [line.strip() for line in open("IntegerArray.txt", 'r')]
-data = [int(i) for i in data]
-
 arr100 = [line.strip() for line in open("100.txt", 'r')]
 arr100 = [int(i) for i in arr100]
 
-def mergeSort(alist):
-    # if length of alist is greater than one, split it 
-    # in half
-    if len(alist)>1:
-        mid = len(alist)//2
-        lefthalf = alist[:mid]
-        righthalf = alist[mid:]
-        # mergeSort each half
-        mergeSort(lefthalf)
-        mergeSort(righthalf)
+def mergesort(unsorted_list):
 
-        i=0     # current index of left half
-        j=0     # current index of right half
-        k=0     # index of complete list
-        
-        while i<len(lefthalf) and j<len(righthalf):
-            # iterate through both halves of the list, 
-            # adding the next lowest value to aList.
-            if lefthalf[i]<righthalf[j]:
-                alist[k]=lefthalf[i]
-                i += 1
-            else:
-                alist[k]=righthalf[j]
-                j += 1
-            k=k+1
-        # deal with stragglers: 
-        while i<len(lefthalf):
-            alist[k]=lefthalf[i]
-            i=i+1
-            k=k+1
+	if len(unsorted_list) > 1:
+		mid = len(unsorted_list)//2
+		left = mergesort(unsorted_list[:mid])
+		right = mergesort(unsorted_list[mid:])
+		left_index = 0
+		right_index = 0
+		merged = []
+		while left_index < len(left) and right_index < len(right):
+			if left[left_index] < right[right_index]:
+				merged.append(left[left_index])
+				left_index += 1
+			else:
+				merged.append(right[right_index])
+				right_index += 1
+		if left_index < len(left):
+			merged.extend(left[left_index:])
+		else:
+			merged.extend(right[right_index:])
+		return merged
+	else:
+		return(unsorted_list)
 
-        while j<len(righthalf):
-            alist[k]=righthalf[j]
-            j=j+1
-            k=k+1
-print(arr100)
-mergeSort(arr100)
-print(arr100)
+print(mergesort(arr100))

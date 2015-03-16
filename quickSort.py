@@ -1,36 +1,34 @@
-arr10 = [line.strip() for line in open("10.txt", 'r')]
-arr10 = [int(i) for i in arr10]
-
 arr100 = [line.strip() for line in open("100.txt", 'r')]
 arr100 = [int(i) for i in arr100]
 
-arr1000 = [line.strip() for line in open("1000.txt", 'r')]
-arr1000 = [int(i) for i in arr1000]
-
-def quickSortFirst(array):
-	# quickSort using first element of array as pivot.
-	if len(array) <= 1:
-		return array
+def quicksort(unsorted_list, lower=0, upper=None):
+	print('current list: {}'.format(unsorted_list[lower:upper]))
+	if upper == None:
+		upper = len(unsorted_list)
+	if upper - lower < 2:
+		print('STOPPING BRANCH')
+		return
 	else:
-		# iterate through array[1:]
-		# if x is smaller than array[0], move it to the front
-		# of the list by swapping its position with the smallest
-		# x larger than array[0].
-		pivot = array[0]
-		j = 1  		# index of first number larger than pivot
-		for i in range(1, len(array)):
-			if array[i] < pivot:
-				array[i], array[j] = array[j], array[i]
-				j += 1
-			if array[i] > pivot:
+		pivot = unsorted_list[lower]
+		first_larger_index = lower + 1
+		for index in range(lower + 1, upper):
+			if unsorted_list[index] < pivot:
+				temp = unsorted_list[first_larger_index]
+				unsorted_list[first_larger_index] = unsorted_list[index]
+				unsorted_list[index] = temp
+				first_larger_index += 1
+			else:
 				pass
-		# move array[0] to array[j-1]
-		array[0], array[j-1] = array[j-1], array[0]
-		# quickSortFirst each half of the list and reassemble.
-		return quickSortFirst(array[:j-1]) + [pivot] + quickSortFirst(array[j:])
-
-quickSortFirst(arr10)
-
-quickSortFirst(arr100)
-
-quickSortFirst(arr1000)
+		temp = unsorted_list[first_larger_index - 1]
+		unsorted_list[first_larger_index - 1] = pivot
+		unsorted_list[lower] = temp
+		print('moving pivot {} to correct location: {}'.format(pivot, unsorted_list))
+		print('left half:', unsorted_list[lower:first_larger_index - 1])
+		print('right half:', unsorted_list[first_larger_index:upper])
+		#unsorted_list[:first_larger_index - 1] = quicksort(unsorted_list[:first_larger_index - 1])
+		quicksort(unsorted_list, lower, first_larger_index-1)
+		quicksort(unsorted_list, first_larger_index, upper)
+	
+print(arr100)
+quicksort(arr100)
+print(arr100)
