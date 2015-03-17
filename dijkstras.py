@@ -1,3 +1,5 @@
+from math import floor
+
 # Example map from Wikipedia Dijkstras algorithm.
 # Node: [(node, distance)]
 
@@ -10,45 +12,94 @@ ex_map = {
 	6: [(1, 14), (3, 2), (5, 9)],
 }
 
-def dijkstras(initial_node, destination_node, edge_set_by_node, nodes=None, unvisited=None):
-	# Assign to every node a tentative distance value. 0 for the starting node
-	# and infinity for all others. 
-	if nodes is None:
-		nodes = {key: float('inf') for key in edge_set_by_node.keys()}
-		nodes[initial_node] = 0
-	# Create a set of all unvisited nodes
-	if unvisited is None:
-		unvisited = set(edge_set_by_node.keys())
-	
-	# Set the initial node as current
-	current_node = initial_node
-	
-	# For the current node, consider all its unvisited neighbors and calculate their 
-	# tentative distances. Compare the tentative distance to the current assigned value
-	# and assign the smaller one.
-	neighbors = edge_set_by_node[current_node]
-	print(neighbors)
-	current_distance = nodes[current_node]
-	for neighbor in neighbors:
-		node = neighbor[0]
-		new_distance = neighbor[1]
-		if node in unvisited and nodes[node] > new_distance + current_distance:
-			nodes[node] = new_distance + current_distance 
+class PriorityQueue():
+	def __init__(self, distances):
+		self.distances = distances
+		self.nodes = []
+		self.empty = True
 
-	# When all neighbors have been considered, mark the current node as visited and remove it 
-	# from the set of unvisited nodes.
-	unvisited.remove(current_node)
-	# If the destination node has been marked visited, or if the smallest tentative distance 
-	# among nodes in the unvisited set is infinity(they have no connection to the rest of the graph) 
-	# Stop.
-	if destination_node not in unvisited:
-		return nodes[destination_node]
-	# Select the unvisited node that is marked with the  smallest tentative distance and set it 
-	# as the new current node.
-	unvisited_distances = {node: nodes[node] for node in unvisited}
-	min_distance = min(unvisited_distances.values())
-	if min_distance != float('inf'):
-		current_node = [key for key in unvisited_distances.keys() if unvisited_distances[key] == min_distance][0]
-		return dijkstras(current_node, destination_node, edge_set_by_node, nodes, unvisited)
+	def add(self, node):
+		self.nodes.append(node)
+		self.empty = False
+		node_index = len(self.nodes) - 1	
+		self.move_up(node_index)
+
+	def move_up(self, index):
+		parent = self.get_parent(index)
+		if not parent:
+			pass
+		elif self.distances[self.nodes[parent]] < self.distances[self.nodes[index]]:
+			temp = self.nodes[parent]
+			self.nodes[parent] = self.nodes[index]
+			self.nodes[index] = temp
+			self.move_up(parent)
+
+	def move_down(self, index):
+		children = self.get_children(index)
+		if not children:
+			pass
+		else:
+			for child in children:
+				if self.distances[self.nodes[child]] < self.distances[self.nodes[index]]:
+					temp = self.nodes[child]
+					self.nodes[child] = self.nodes[index]
+					self.nodes[index] = temp
+					self.move_down(child)
+					break
+
+	
+	def get_next(self):
+		if len(self.nodes) < 2:
+			self.empty = True
+		distace_list = [self.distances[node] for node in self.nodes]
+		next = self.nodes[0]
+		self.nodes[0] = self.nodes.pop()
+		self.move_down(0)
+		return next
+
+	def get_parent(self, index):
+		parent = floor((index - 1) // 2)
+		if parent >= 0:
+			return parent
+		else:
+			return None
+
+	def get_children(self, index):
+		index_1 = index * 2 + 1
+		index_2 = (index * 2 + 2)
+		if index_2 < len(self.nodes):
+			if self.distances[self.nodes[index_1]] < self.distances[self.nodes[index_2]]:
+				return (index_1, index_2)
+			else:
+				return (index_2, index_1)
+		elif index_1 < len(self.nodes):
+			return (index_1, )
+		else:
+			return None
+
+
+def dijkstras(initial_node, destination_node, edge_set_by_node):
+
+	distances = {key: float('inf') for key in edge_set_by_node.keys()}
+	distances[initial_node] = 0
+	current_node = initial_node
+	visited = set()
+	to_visit = PriorityQueue(distances)
+	to_visit.add(current_node)
+
+	while not to_visit.empty and destination_node not in visited:
+		neighbors = edge_set_by_node[current_node]
+		current_distance = distances[current_node]
+		for neighbor in neighbors:
+			node = neighbor[0]
+			new_distance = current_distance + neighbor[1]
+			if node not in visited and distances[node] > new_distance:
+				distances[node] = new_distance
+				if node not in to_visit.nodes:
+					to_visit.add(node)
+		visited.add(current_node)
+		current_node = to_visit.get_next()
+	return distances[destination_node]
+
 
 print(dijkstras(1, 6, ex_map))
