@@ -1,84 +1,162 @@
-class Binary_Search_Tree():
+class Node():
+	def __init__(self, value):
+		self.value = value
+		self.left = None
+		self.right = None
+
+	def has_children(self):
+		if self.left or self.right:
+			return True
+		else:
+			return False
+
+
+
+class Tree():
 	def __init__(self):
-		self.root = ''
-		self.node_to_children = {}
+		self.root = None
 
 
-	def insert(self, item, root='', parent=None):
-		if root is '':
-			if self.root is '':
-				self.root = item
-				self.node_to_children[item] = [None, None, None]
-				return
-			else:
-				root = self.root
-		if root is None:	
-			self.node_to_children[item] = [None, None, parent]
-			if parent < item:
-				self.update_parent(parent, item, 1)
-			else:
-				self.update_parent(parent, item, 0)
-		elif root > item:
-			self.insert(item, self.node_to_children[root][0], root)
+	def insert(self, value):
+		if self.root is None:fcd                      
+			self.root = Node(value)
+			return
+		sub_tree = self.root
+		while True:
+			if value < sub_tree.value:
+				if not sub_tree.left:
+					sub_tree.left = Node(value)
+					return
+				else: 
+					sub_tree = sub_tree.left
+			if value > sub_tree.value:
+				if not sub_tree.right:
+					sub_tree.right = Node(value)
+					return
+				else:
+					sub_tree = sub_tree.right
+
+
+
+	def remove_root(self, node):
+		# No children
+		if not node.has_children():
+			self.root = None
+			return
+		# One child
+		elif node.left and not node.right:
+			self.root = node.left
+			return
+		elif node.right and not node.left:
+			self.root = node.right
+			return
+		# Two children and appropriate GrandChildren
+		elif node.left.right:
+			node.value = node.left.right.value
+			return self.remove(node.left.right, node.left)
+		elif node.right.left:
+			node.value = node.right.left.value
+			return self.remove(node.right.left, node.right)
+		# Two children and no appropriate grandchildren
 		else:
-			self.insert(item, self.node_to_children[root][1], root)
+			node.value = node.left.value
+			return self.remove(node.left, node)
 
 
-	def delete(self, item):
-		left, right, parent = self.node_to_children[item]
-		if left is None and right is None:
-			self.node_to_children.pop(item, None)
-			if item < parent:
-				self.update_parent(parent, None, 0)
+
+	def remove(self, node, parent=None):
+		# Check there is a tree
+		if self.root is None:
+			return
+		# If no parent is provided, start at root
+		if parent is None:
+			parent = self.root
+		# If the node to be removed is root, got to special case function.
+		if node == self.root:
+			return self.remove_root(node)
+
+		sub_tree = parent
+		while True:
+			if sub_tree.value < node.value:
+				if sub_tree.right == node:
+					# if node has no children, remove pointer to node.
+					if not node.has_children():
+						sub_tree.right = None
+						return
+
+					# if node has only one child, sub_tree.right points to that child.
+
+					elif node.left and not node.right:
+						sub_tree.right = node.left
+						return
+					elif node.right and not node.left:
+						sub_tree.right = node.right
+						return
+
+					# if node has a largest smallest grandchild or a smallest largest
+					# grandchild, replace node.value with the value of the grandchild,
+					# remove the grandchild.
+
+					elif node.left.right:
+						sub_tree.right.value = node.left.right.value
+						return remove(node.left.right, node.left)
+					elif node.right.left:
+						sub_tree.right.value = node.right.left.value
+						return remove(node.right.left)
+					
+					else:
+						node.value = node.left.value
+						remove(node.left, sub_tree)
+				else:
+					sub_tree = sub_tree.right
 			else:
-				self.update_parent(parent, None, 1)
-		elif left is None:
-			self.update_parent(parent, right, 1)
-			self.node_to_children[right][2] = parent
-			self.node_to_children.pop(item, None)
-		else:
-			self.update_parent(parent, left, 0)
-			self.node_to_children[left][2] = parent
-			self.node_to_children.pop(item, None)
+				# sub_tree.value > node.value:
+				if sub_tree.left == node:
+					# node has no children. Remove pointer
+					if not node.has_children():
+						sub_tree.left = None
+						return
+
+					# node has one child. sub_tree.left points to child.
+					elif node.left and not node.right:
+						sub_tree.left = node.left
+						return
+					elif node.right and not node.left:
+						sub_tree.left = node.right
+						return
+
+					# node has two children.
+					# node has a smallest, largest or largest, smallest grand child
+					elif node.left.right:
+						sub_tree.left.value = node.left.right.value
+						return remove(node.left.right, node.left)
+					elif node.right.left:
+						sub_tree.left.value = node.right.left.value
+						return remove(node.right.left, node.right)
+					
+					# node has two children but no appropriate grandchildren
+					else:
+						node.value = node.right.value
+						remove(node.right, sub_tree)
+				else:
+					sub_tree = sub_tree.left
+
 		
 
-	def find(self, item, root=''):
-		if root is '':
-			root = self.root
-			print(root)
-			self.find(item, root)
-		elif root == item or root is None:
-			print('found item or item not in tree')
-			print(item, ':', self.node_to_children[root])
-		elif root < item:
-			root = self.node_to_children[root][1]
-			self.find(item, root)
-		else:
-			print('root more than item')
-			root = self.node_to_children[root][0]
-			self.find(item, root)
+	def find(self, value):
+		sub_tree = self.root
+		while sub_tree.value != value:
+			if value < sub_tree.value:
+				if not sub_tree.left:
+					print("{} is not in tree".format(value))
+					return
+				else:
+					sub_tree = sub_tree.left
+			elif value > sub_tree.value:
+				if not sub_tree.right:
+					print("{} is not in tree".format(value))
+					return
+				else:
+					sub_tree = sub_tree.right
+		return sub_tree
 
-
-	def update_parent(self, parent, replacement_child, leftrightindex):
-		if parent is None:
-			pass
-		self.node_to_children[parent][leftrightindex] = replacement_child
-
-
-BST = Binary_Search_Tree()
-
-BST.insert(5)
-BST.insert(3)
-BST.insert(7)
-BST.insert(4)
-BST.insert(8)
-BST.insert(2)
-BST.insert(9)
-BST.insert(1)
-BST.insert(6)
-BST.insert(10)
-BST.find(7)
-BST.delete(3)
-BST.delete(6)
-
-	
