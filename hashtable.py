@@ -2,13 +2,13 @@ class Node():
 	def __init__(self, key):
 		self.previous = None
 		self.next = None
-		self.key = key
 
 
 class Order():
 	def __init__(self):
 		self.start = None
 		self.end = None
+
 
 	def add(self, key):
 		node = Node(key)
@@ -31,13 +31,13 @@ class Order():
 			self.end = node.previous
 
 
-
 class Hashtable():
 	def __init__ (self, length=8):
 		self.num_keys = 0
 		self.length = length
 		self.table = [None] * self.length	
 		self.order = Order()
+
 
 	def add(self, key, hash_num=None):
 		if hash_num == None:
@@ -48,7 +48,6 @@ class Hashtable():
 				order_info = self.order.add(key)
 				self.table[index] = (key, hash_num, order_info)
 				self.num_keys += 1
-				print(self.table)
 				if self.num_keys > self.length * .6:
 					self.resize()
 				return
@@ -77,9 +76,7 @@ class Hashtable():
 
 
 	def resize(self):
-		print("~~~~~RESIZING~~~~~~~~")
 		new_table = Hashtable(self.length*2)
-		print(new_table, "NEW TABLE")
 		for i in range(self.length):
 			if self.table[i] is not None and self.table[i] != 'removed item':
 				key, hash_num, order_info = self.table[i]
@@ -95,27 +92,4 @@ class Hashtable():
 			ordered_list.append(current.key)
 			current = current.next
 		return ordered_list
-
-
-		
-
-table = Hashtable()
-
-table.add('first')
-print(table.iterate_in_order())
-table.add('second')
-print(table.iterate_in_order())
-table.add('third')
-print(table.iterate_in_order())
-table.add('fourth')
-print(table.iterate_in_order())
-print(table.find('fourth'))
-table.remove('fourth')
-print(table.iterate_in_order())
-table.add('fourth')
-print(table.iterate_in_order())
-table.add('fifth')
-print(table.iterate_in_order())
-table.add('sixth')
-print(table.iterate_in_order())
 
