@@ -10,15 +10,40 @@ class Node():
 		else:
 			return False
 
+class Iterator(object):
+	def __init__(self, root):
+		self.root = root
+		self.stack = []
+		self.chase_left(self.root)
+
+	def __iter__(self):
+		return self
+
+	def __next__(self):
+		if not self.stack:
+			raise StopIteration
+		current_node = self.stack.pop()
+		if current_node.right:
+			self.chase_left(current_node.right)
+		return current_node
+
+	def chase_left(self, node):
+		while node.left:
+			self.stack.append(node)
+			node = node.left
+		self.stack.append(node)
 
 
 class Tree():
 	def __init__(self):
 		self.root = None
 
+	def __iter__(self):
+		return Iterator(self.root)
+
 
 	def insert(self, value):
-		if self.root is None:fcd                      
+		if self.root is None:                      
 			self.root = Node(value)
 			return
 		sub_tree = self.root
@@ -159,4 +184,16 @@ class Tree():
 				else:
 					sub_tree = sub_tree.right
 		return sub_tree
+
+
+tree = Tree()
+with open('100.txt', 'r') as f:
+	for line in f:
+		print('inserting:',line)
+		tree.insert(int(line.strip()))
+
+for num in tree:
+	print(num.value)
+		
+
 
