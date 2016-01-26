@@ -1,8 +1,8 @@
-arr100 = [line.strip() for line in open("100.txt", 'r')]
-arr100 = [int(i) for i in arr100]
+with open('100.txt', r) as f:
+	unsorted_list = [int(line.rstrip('\n')) for line in f]
 
 def quicksort(unsorted_list, lower=0, upper=None):
-	if upper == None:
+	if upper is None:
 		upper = len(unsorted_list)
 	if upper - lower < 2:
 		return
@@ -23,6 +23,6 @@ def quicksort(unsorted_list, lower=0, upper=None):
 		quicksort(unsorted_list, lower, first_larger_index-1)
 		quicksort(unsorted_list, first_larger_index, upper)
 	
-print(arr100)
+print(unsorted_list)
 quicksort(arr100)
-print(arr100)
+print(unsorted_list)
