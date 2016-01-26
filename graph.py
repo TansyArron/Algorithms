@@ -2,7 +2,7 @@ from adjacency_list import adjacency_list
 from connection_list import connection_list
 
 
-class Node:
+class Node(object):
     def __init__(self, value):
         self.value = value
         self.neighbors = {}
@@ -25,7 +25,7 @@ class Node:
 
 
 
-class Graph:
+class Graph(object):
     def __init__(self):
         self.nodes = {}
 
