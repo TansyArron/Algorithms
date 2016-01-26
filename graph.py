@@ -1,3 +1,7 @@
+from adjacency_list import adjacency_list
+from connection_list import connection_list
+
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -32,7 +36,7 @@ class Graph:
         if node.value in self.nodes.keys():
             del self.nodes[node.value]
 
-    def get_or_create_node_by_value(self, value):
+    def create_node_by_value(self, value):
         if value in self.nodes.keys():
             return self.nodes[value]
         else:
@@ -44,18 +48,19 @@ class Graph:
     def from_adjacency_list(cls, adjacency_list):
         self = cls()
         for node_index, neighbors in enumerate(adjacency_list):
-            node = self.get_or_create_node_by_value(node_index)
+            node = self.create_node_by_value(node_index)
+            self.nodes[node_index] = node
             for neighbor_index in neighbors:
-                neighbor = self.get_or_create_node_by_value(neighbor_index)
+                neighbor = self.create_node_by_value(neighbor_index)
                 node.add_neighbor(neighbor)
-        return self
+        return self.nodes
 
     @classmethod
     def from_connection_list(cls, connection_list):
         self = cls()
         for connection in connection_list:
-            node = self.get_or_create_node_by_value(connection[0])
-            neighbor = self.get_or_create_node_by_value(connection[1])
+            node = self.create_node_by_value(connection[0])
+            neighbor = self.create_node_by_value(connection[1])
             node.add_neighbor(neighbor)
         return self
 
@@ -105,60 +110,7 @@ class Graph:
         return repr(self.nodes)
 
 
-# if __name__ == '__main__':
-adjacency_list = [
-    [],
-    [2, 4],
-    [1, 3, 5],
-    [2],
-    [1, 7],
-    [2, 6, 8],
-    [5, 9, 10],
-    [4],
-    [5],
-    [6, 12],
-    [6, 11],
-    [10],
-    [9],
-    []
-]
+# ag = Graph.from_adjacency_list(adjacency_list)
 
-connection_list = [
-    [1, 2],
-    [1, 4],
-    [2, 1],
-    [2, 3],
-    [2, 5],
-    [3, 2],
-    [3, 11],
-    [4, 1],
-    [4, 5],
-    [4, 7],
-    [5, 2],
-    [5, 4],
-    [5, 6],
-    [5, 8],
-    [6, 5],
-    [6, 9],
-    [6, 10],
-    [7, 4],
-    [7, 13],
-    [8, 5],
-    [8, 14],
-    [9, 6],
-    [9, 12],
-    [10, 6],
-    [10, 11],
-    [11, 3],
-    [11, 10],
-    [12, 9],
-    [13, 7],
-    [13, 14],
-    [14, 8],
-    [14, 13]
-]
-
-ag = Graph.from_adjacency_list(adjacency_list)
-
-print(ag.shortest_path(ag.nodes[1], ag.nodes[8]))
-cg = Graph.from_connection_list(connection_list)
+# print(ag.shortest_path(ag.nodes[1], ag.nodes[8]))
+# cg = Graph.from_connection_list(connection_list)
