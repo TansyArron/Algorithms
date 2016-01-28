@@ -1,11 +1,8 @@
-
-
 class Hashtable():
 	def __init__ (self, length=8):
 		self.num_keys = 0
 		self.length = length
 		self.table = [None] * self.length	
-
 
 	def add(self, key, hash_num=None):
 		if hash_num == None:
@@ -24,13 +21,11 @@ class Hashtable():
 				print("collision at index {}".format(index))
 				index = (index + 1) % self.length
 
-
 	def remove(self, key):
 		entry, index = self.find(key)
 		self.table[index] = 'removed item'
 		self.num_keys -= 1
 		
-
 	def find(self, key):
 		hash_num = abs(hash(key))
 		index = hash_num % self.length
@@ -41,7 +36,6 @@ class Hashtable():
 				index = (index + 1) % self.length
 		raise KeyError(key)
 
-
 	def resize(self):
 		new_table = Hashtable(self.length*2)
 		for i in range(self.length):
@@ -51,6 +45,7 @@ class Hashtable():
 		self.length = new_table.length
 		self.table = new_table.table
 		return
+
 
 table = Hashtable()
 table.add('first')

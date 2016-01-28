@@ -1,5 +1,8 @@
+from test_data.sorted_list import sorted_list
 
 def binary_search(sorted_list, element):
+	''' find given element in a sorted sorted_list
+	'''
 	upper = len(sorted_list)
 	lower = 0
 	while upper - lower > 0:
@@ -12,8 +15,8 @@ def binary_search(sorted_list, element):
 			upper = mid
 	return None
 
-sorted_list = [1,2,3,4,5]
-print(binary_search(sorted_list, 3))
+test = sorted_list(30)
+print(binary_search(test, 3))
 
 
 

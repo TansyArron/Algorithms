@@ -1,4 +1,4 @@
-arr100 = [line.strip() for line in open("100.txt", 'r')]
+arr100 = [line.strip() for line in open("./test_data/100.txt", 'r')]
 arr100 = [int(i) for i in arr100]
 
 def mergesort(unsorted_list):

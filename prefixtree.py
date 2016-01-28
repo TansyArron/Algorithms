@@ -11,10 +11,8 @@ class WordIterator(object):
 		self.stack = []
 		self.stack.append((root, min(root.children), ''))
 		
-
 	def __iter__(self):
 		return self
-
 
 	def __next__(self):
 		if not self.stack:
@@ -32,7 +30,6 @@ class WordIterator(object):
 			if current_node.end:
 				return prefix
 
-
 	def get_next_child(self, parent, key):
 		keys = sorted(parent.children.keys())
 		key_index = keys.index(key)
@@ -43,7 +40,6 @@ class Tree():
 	def __init__(self):
 		self.root = Node('')
 
-
 	def insert(self, word):
 		word = word.lower()
 		current_node = self.root
@@ -52,7 +48,6 @@ class Tree():
 				current_node.children[letter] = Node(letter)
 			current_node = current_node.children[letter]
 		current_node.end = True
-
 
 	def find(self, word):
 		current_node = self.root
@@ -96,7 +91,7 @@ class Tree():
 				
 
 dictionary = Tree()
-with open('words.txt', 'r') as f:
+with open('./test_data/words.txt', 'r') as f:
 	for line in f:
 		dictionary.insert(line.strip())
 

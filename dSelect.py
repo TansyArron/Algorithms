@@ -1,14 +1,5 @@
-arr10 = [line.strip() for line in open("10.txt", 'r')]
-arr10 = [int(i) for i in arr10]
-
-arr100 = [line.strip() for line in open("100.txt", 'r')]
-arr100 = [int(i) for i in arr100]
-
-arr1000 = [line.strip() for line in open("1000.txt", 'r')]
-arr1000 = [int(i) for i in arr1000]
-
 import random
-from mergesort import mergeSort
+from mergesort import mergesort
 
 
 def dSelect(array, orderStatistic):
@@ -24,7 +15,7 @@ def dSelect(array, orderStatistic):
 			fifths.append(array[i:i+5])
 		# choose pivot as median of medians.
 		for x in fifths:
-			mergeSort(x)
+			mergesort(x)
 		 	medians.append(x[len(x)/2])		
 		pivot = dSelect(medians, len(medians)/2)
 		pivotIndex = array.index(pivot)		
@@ -56,6 +47,14 @@ def dSelect(array, orderStatistic):
 		if j < orderStatistic:
 			return dSelect(array[j:], orderStatistic - j)
 
+arr10 = [line.strip() for line in open("./test_data/10.txt", 'r')]
+arr10 = [int(i) for i in arr10]
+
+arr100 = [line.strip() for line in open("./test_data/100.txt", 'r')]
+arr100 = [int(i) for i in arr100]
+
+arr1000 = [line.strip() for line in open("./test_data/1000.txt", 'r')]
+arr1000 = [int(i) for i in arr1000]
 
 print dSelect(arr1000, 9)
 

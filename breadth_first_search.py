@@ -1,8 +1,12 @@
-from graph import Graph, Node
-from adjacency_list import adjacency_list
+from graph import Graph
+from node import Node
+from test_data.graphs import adjacency_list
 
 
 class ExtendedNode(Node):
+  ''' A Node object with added attributes distance and parent which default to 
+  infinity and None respectively.
+  '''
   def __init__(self, value):
     super(ExtendedNode, self).__init__(value)
     self.distance = float('inf')
@@ -10,6 +14,8 @@ class ExtendedNode(Node):
 
 
 class ExtendedGraph(Graph):
+  ''' A version of Graph that uses ExtendedNode in place of Node
+  '''
   def create_node_by_value(self, value):
         if value in self.nodes.keys():
             return self.nodes[value]

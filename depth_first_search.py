@@ -1,5 +1,5 @@
 from graph import Graph
-from adjacency_list import adjacency_list
+from test_data.graphs import adjacency_list
 
 def depth_first_search(graph, start):
   ''' Given a graph and a start node in the graph, return all nodes
@@ -18,7 +18,6 @@ def depth_first_search(graph, start):
 
 graph = Graph()
 nodes = graph.from_adjacency_list(adjacency_list)
-
 
 discovered = depth_first_search(graph, nodes[1])
 

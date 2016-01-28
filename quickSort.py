@@ -1,4 +1,4 @@
-with open('100.txt', r) as f:
+with open('./test_data/100.txt', 'r') as f:
 	unsorted_list = [int(line.rstrip('\n')) for line in f]
 
 def quicksort(unsorted_list, lower=0, upper=None):
@@ -24,5 +24,5 @@ def quicksort(unsorted_list, lower=0, upper=None):
 		quicksort(unsorted_list, first_larger_index, upper)
 	
 print(unsorted_list)
-quicksort(arr100)
+quicksort(unsorted_list)
 print(unsorted_list)

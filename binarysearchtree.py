@@ -1,3 +1,5 @@
+# IF RUNNING PYTHON 2.x CHANGE 
+
 class Node():
 	def __init__(self, value):
 		self.value = value
@@ -10,7 +12,7 @@ class Node():
 		else:
 			return False
 
-class Iterator(object):
+class Iterator():
 	def __init__(self, root):
 		self.root = root
 		self.stack = []
@@ -35,12 +37,12 @@ class Iterator(object):
 
 
 class Tree():
+
 	def __init__(self):
 		self.root = None
 
 	def __iter__(self):
 		return Iterator(self.root)
-
 
 	def insert(self, value):
 		if self.root is None:                      
@@ -60,8 +62,6 @@ class Tree():
 					return
 				else:
 					sub_tree = sub_tree.right
-
-
 
 	def remove_root(self, node):
 		# No children
@@ -86,8 +86,6 @@ class Tree():
 		else:
 			node.value = node.left.value
 			return self.remove(node.left, node)
-
-
 
 	def remove(self, node, parent=None):
 		# Check there is a tree
@@ -166,8 +164,6 @@ class Tree():
 				else:
 					sub_tree = sub_tree.left
 
-		
-
 	def find(self, value):
 		sub_tree = self.root
 		while sub_tree.value != value:
@@ -187,7 +183,7 @@ class Tree():
 
 
 tree = Tree()
-with open('100.txt', 'r') as f:
+with open('./test_data/100.txt', 'r') as f:
 	for line in f:
 		print('inserting:',line)
 		tree.insert(int(line.strip()))
